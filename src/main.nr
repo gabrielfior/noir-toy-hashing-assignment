@@ -1,4 +1,7 @@
 global PRIME: u32 = 16777619;
+global INITIAL_STATE: u64 = 2166136261; // 0x811c9dc5
+global SIZE: u64 = 4294967296; // 2.pow_32(32);
+
 
 fn main(value: u32, hash_value: pub u32){
     let calculated_hash_value = calculate_hash(value);
@@ -8,6 +11,15 @@ fn main(value: u32, hash_value: pub u32){
 
 fn calculate_hash(num: u32) -> u32 {
     
+    let mut hash_value: u32 = 2166136261;
+    let num_bytes = (num as Field).to_be_bytes(4);
+
+    for i in 0..4 {
+        let product = hash_value * PRIME;
+        hash_value = product ^ (num_bytes[i] as u32);
+   }
+
+   hash_value
 }
 
 #[test]
